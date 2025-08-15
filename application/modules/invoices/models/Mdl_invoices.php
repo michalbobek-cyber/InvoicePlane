@@ -624,4 +624,10 @@ class Mdl_Invoices extends Response_Model
             $this->db->update('ip_invoices');
         }
     }
+
+
+public function default_where()
+{
+    $this->db->where('ip_invoices.account_id', (int)$this->session->userdata('account_id'));
+}
 }

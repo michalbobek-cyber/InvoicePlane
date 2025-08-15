@@ -267,4 +267,10 @@ class Mdl_Tasks extends Response_Model
             parent::save($task->task_id, array('project_id' => null));
         }
     }
+
+
+public function default_where()
+{
+    $this->db->where('ip_tasks.account_id', (int)$this->session->userdata('account_id'));
+}
 }

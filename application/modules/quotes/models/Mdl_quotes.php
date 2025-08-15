@@ -525,4 +525,10 @@ class Mdl_Quotes extends Response_Model
             }
         }
     }
+
+
+public function default_where()
+{
+    $this->db->where('ip_quotes.account_id', (int)$this->session->userdata('account_id'));
+}
 }

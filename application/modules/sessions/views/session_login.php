@@ -79,7 +79,9 @@
             <a href="<?php echo site_url('sessions/passwordreset'); ?>" class="btn btn-default">
                 <?php _trans('forgot_your_password'); ?>
             </a>
-
+<p class="text-center" style="margin-top:10px">
+    <a href="<?= site_url('register'); ?>">Registrovat nový účet</a>
+</p>
         </form>
 
     </div>

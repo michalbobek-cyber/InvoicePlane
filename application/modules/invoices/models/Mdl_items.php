@@ -152,4 +152,10 @@ class Mdl_Items extends Response_Model
 
         return true;
     }
+
+
+public function default_where()
+{
+    $this->db->where('ip_invoice_items.account_id', (int)$this->session->userdata('account_id'));
+}
 }

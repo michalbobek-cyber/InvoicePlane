@@ -78,4 +78,10 @@ class Mdl_Projects extends Response_Model
         return $result;
     }
 
+
+
+public function default_where()
+{
+    $this->db->where('ip_projects.account_id', (int)$this->session->userdata('account_id'));
+}
 }

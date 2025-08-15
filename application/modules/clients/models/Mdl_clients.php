@@ -261,4 +261,10 @@ class Mdl_Clients extends Response_Model
         $this->filter_where('client_active', 1);
         return $this;
     }
+
+
+public function default_where()
+{
+    $this->db->where('ip_clients.account_id', (int)$this->session->userdata('account_id'));
+}
 }

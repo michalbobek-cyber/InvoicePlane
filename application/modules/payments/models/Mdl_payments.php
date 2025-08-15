@@ -224,4 +224,10 @@ class Mdl_Payments extends Response_Model
         return $this;
     }
 
+
+
+public function default_where()
+{
+    $this->db->where('ip_payments.account_id', (int)$this->session->userdata('account_id'));
+}
 }

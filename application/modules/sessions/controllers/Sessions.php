@@ -46,7 +46,20 @@ class Sessions extends Base_Controller
                 } else {
 
                     if ($this->authenticate($this->input->post('email'), $this->input->post('password'))) {
-                        if ($this->session->userdata('user_type') == 1) {
+      if ($this->session->userdata('user_type') == 1) {
+// >>> vložený multi-tenant blok <<<
+    $this->load->model('accounts/mdl_account_users');
+    $this->load->model('accounts/mdl_accounts');
+    $user_id = (int)$this->session->userdata('user_id');
+    $accounts = $this->mdl_account_users->accounts_for_user($user_id);
+    if (!$accounts) {
+        $acc_id = $this->mdl_accounts->create_default_for_user($user_id);
+        $this->session->set_userdata('account_id', (int)$acc_id);
+    } else {
+        $this->session->set_userdata('account_id', (int)$accounts[0]['account_id']);
+    }
+    // <<< konec vloženého bloku <<<
+                  
                             redirect('dashboard');
                         } elseif ($this->session->userdata('user_type') == 2) {
                             redirect('guest');

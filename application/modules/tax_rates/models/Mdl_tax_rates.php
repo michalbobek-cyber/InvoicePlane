@@ -48,4 +48,10 @@ class Mdl_Tax_Rates extends Response_Model
         );
     }
 
+
+
+public function default_where()
+{
+    $this->db->where('ip_tax_rates.account_id', (int)$this->session->userdata('account_id'));
+}
 }

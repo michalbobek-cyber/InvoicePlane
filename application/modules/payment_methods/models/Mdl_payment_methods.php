@@ -43,4 +43,10 @@ class Mdl_Payment_Methods extends Response_Model
         );
     }
 
+
+
+public function default_where()
+{
+    $this->db->where('ip_payment_methods.account_id', (int)$this->session->userdata('account_id'));
+}
 }

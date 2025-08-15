@@ -126,4 +126,10 @@ class Mdl_Products extends Response_Model
         return $db_array;
     }
 
+
+
+public function default_where()
+{
+    $this->db->where('ip_products.account_id', (int)$this->session->userdata('account_id'));
+}
 }
