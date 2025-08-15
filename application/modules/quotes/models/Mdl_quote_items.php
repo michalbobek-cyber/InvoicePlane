@@ -93,6 +93,9 @@ class Mdl_Quote_Items extends Response_Model
      */
     public function save($id = null, $db_array = null)
     {
+        if (is_null($db_array)) { $db_array = $this->db_array(); }
+        $db_array['account_id'] = (int)$this->session->userdata('account_id');
+        
         $id = parent::save($id, $db_array);
 
         $this->load->model('quotes/mdl_quote_item_amounts');

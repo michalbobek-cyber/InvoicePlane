@@ -48,16 +48,39 @@ class Sessions extends Base_Controller
                     if ($this->authenticate($this->input->post('email'), $this->input->post('password'))) {
       if ($this->session->userdata('user_type') == 1) {
 // >>> vložený multi-tenant blok <<<
-    $this->load->model('accounts/mdl_account_users');
-    $this->load->model('accounts/mdl_accounts');
-    $user_id = (int)$this->session->userdata('user_id');
-    $accounts = $this->mdl_account_users->accounts_for_user($user_id);
-    if (!$accounts) {
-        $acc_id = $this->mdl_accounts->create_default_for_user($user_id);
-        $this->session->set_userdata('account_id', (int)$acc_id);
-    } else {
-        $this->session->set_userdata('account_id', (int)$accounts[0]['account_id']);
+// Multi-tenant: vyber aktivní účet (preferuj OWNER, jinak poslední; když žádný, vytvoř)
+$this->load->model('accounts/mdl_account_users');
+$user_id  = (int)$this->session->userdata('user_id');
+$accounts = $this->mdl_account_users->accounts_for_user($user_id);
+
+$active_id = 0;
+
+// 1) Preferuj účet, kde je uživatel OWNER
+if (!empty($accounts)) {
+    foreach ($accounts as $acc) {
+        if (!empty($acc['role']) && $acc['role'] === 'owner') {
+            $active_id = (int)$acc['account_id'];
+            break;
+        }
     }
+
+    // 2) Pokud žádný OWNER, vezmi poslední účet (obvykle nejnovější)
+    if (!$active_id) {
+        $last = end($accounts);
+        if ($last && isset($last['account_id'])) {
+            $active_id = (int)$last['account_id'];
+        }
+    }
+}
+
+// 3) Pokud uživatel zatím žádný účet nemá, založ mu výchozí
+if (!$active_id) {
+    $this->load->model('accounts/mdl_accounts');
+    $active_id = (int)$this->mdl_accounts->create_default_for_user($user_id);
+}
+
+$this->session->set_userdata('account_id', $active_id);
+
     // <<< konec vloženého bloku <<<
                   
                             redirect('dashboard');

@@ -213,6 +213,7 @@ class Quotes extends Admin_Controller
     public function recalculate_all_quotes()
     {
         $this->db->select('quote_id');
+        $this->db->where('account_id', (int)$this->session->userdata('account_id'));
         $quote_ids = $this->db->get('ip_quotes')->result();
 
         $this->load->model('mdl_quote_amounts');

@@ -345,6 +345,7 @@ public function download($invoice)
     public function recalculate_all_invoices()
     {
         $this->db->select('invoice_id');
+        $this->db->where('account_id', (int)$this->session->userdata('account_id'));
         $invoice_ids = $this->db->get('ip_invoices')->result();
 
         $this->load->model('mdl_invoice_amounts');

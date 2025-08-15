@@ -54,4 +54,12 @@ public function default_where()
 {
     $this->db->where('ip_tax_rates.account_id', (int)$this->session->userdata('account_id'));
 }
+
+
+public function save($id = NULL, $db_array = NULL)
+{
+    if (is_null($db_array)) { $db_array = $this->db_array(); }
+    if (empty($db_array['account_id'])) { $db_array['account_id'] = (int)$this->session->userdata('account_id'); }
+    return parent::save($id, $db_array);
+}
 }
