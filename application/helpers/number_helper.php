@@ -1,6 +1,6 @@
 <?php
 
-if (! defined('BASEPATH')) {
+if ( ! defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -29,15 +29,18 @@ function format_currency($amount)
     $decimal_point = $CI->mdl_settings->setting('decimal_point');
 
     //prevent null format
-    if(is_null($amount)) $amount = 0;
+    if (null === $amount) {
+        $amount = 0;
+    }
 
     if ($currency_symbol_placement == 'before') {
         return $currency_symbol . number_format($amount, ($decimal_point) ? 2 : 0, $decimal_point, $thousands_separator);
-    } elseif ($currency_symbol_placement == 'afterspace') {
-        return number_format($amount, ($decimal_point) ? 2 : 0, $decimal_point, $thousands_separator) . '&nbsp;' . $currency_symbol;
-    } else {
-        return number_format($amount, ($decimal_point) ? 2 : 0, $decimal_point, $thousands_separator) . $currency_symbol;
     }
+    if ($currency_symbol_placement == 'afterspace') {
+        return number_format($amount, ($decimal_point) ? 2 : 0, $decimal_point, $thousands_separator) . '&nbsp;' . $currency_symbol;
+    }
+
+    return number_format($amount, ($decimal_point) ? 2 : 0, $decimal_point, $thousands_separator) . $currency_symbol;
 }
 
 /**
@@ -49,14 +52,13 @@ function format_currency($amount)
  */
 function format_amount($amount = null)
 {
-    if ($amount) {
+    if (is_numeric($amount)) {
         $CI = & get_instance();
         $thousands_separator = $CI->mdl_settings->setting('thousands_separator');
         $decimal_point = $CI->mdl_settings->setting('decimal_point');
 
         return number_format($amount, ($decimal_point) ? 2 : 0, $decimal_point, $thousands_separator);
     }
-    return null;
 }
 
 /**
@@ -68,14 +70,13 @@ function format_amount($amount = null)
  */
 function format_quantity($amount = null)
 {
-    if ($amount) {
+    if (is_numeric($amount)) {
         $CI = & get_instance();
         $thousands_separator = $CI->mdl_settings->setting('thousands_separator');
         $decimal_point = $CI->mdl_settings->setting('decimal_point');
 
         return number_format($amount, ($decimal_point) ? (int) get_setting('default_item_decimals') : 0, $decimal_point, $thousands_separator);
     }
-    return null;
 }
 
 /**
